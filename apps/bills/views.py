@@ -25,7 +25,7 @@ def process(request):
         elif user[0] == True:
             messages.error(request,'The email address you entered (__) is a VALID email address! Thank you!')
             request.session["first_name"] = user[1].first_name
-            return redirect('/books')
+            return redirect('/bills')
     else:
         return redirect('/')
 
