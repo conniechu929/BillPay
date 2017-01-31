@@ -1,3 +1,22 @@
 ul li{
   list-style-type: none;
 }
+
+.navbar navbar-default navbar-fixed-top{
+  position: absolute;
+  background-color: transparent;
+}
+
+.navbar-header {
+  background-color: transparent;
+}
+
+#billTitle {
+  background-image: url("/static/bills/images/people-coffee-tea-meeting.jpg");
+  height: 600px;
+  background-repeat: no-repeat;
+  -webkit-background-size: contain;
+  -moz-background-size: contain;
+  -o-background-size: contain;
+  background-size: contain;
+}
