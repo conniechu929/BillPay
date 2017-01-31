@@ -11,7 +11,7 @@ ul li{
   background-color: transparent;
 }
 
-#billTitle {
+/*#billTitle {
   background-image: url("/static/bills/images/people-coffee-tea-meeting.jpg");
   height: 600px;
   background-repeat: no-repeat;
@@ -19,4 +19,11 @@ ul li{
   -moz-background-size: contain;
   -o-background-size: contain;
   background-size: contain;
+}*/
+
+#billTitle {
+  background-image: url("/static/bills/images/people-coffee-tea-meeting.jpg");
+  height: 600px;
+  background-repeat: no-repeat;
+  background-size: 100% auto;
 }
