@@ -6,5 +6,7 @@ urlpatterns = [
     url(r'^process$', views.process),
     url(r'^login$', views.login),
     url(r'^logout$', views.logout),
-    url(r'^bills$', views.bills)
+    url(r'^bills$', views.bills),
+    url(r'^newbill$', views.addBill),
+    url(r'^markbill/(?P<id>\d+)$', views.markBill),
 ]
