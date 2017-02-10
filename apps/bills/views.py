@@ -8,7 +8,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from django.core.urlresolvers import reverse
-from .forms import RegisterForm, LoginForm, RegistrationForm
+from .forms import RegisterForm, LoginForm, RegistrationForm, LogForm
 import bcrypt
 import forms
 import datetime
@@ -55,6 +55,32 @@ def process(request):
             return redirect('/')
 
         return HttpResponseRedirect('/')
+
+def login(request):
+    bound_log = LogForm()
+
+    if request.method == "POST":
+        bound_log = LogForm(request.POST or None)
+
+        if bound_log.is_valid():
+            info = bound_log.find()
+            if info[0] == True:
+                request.session['user_id'] = info[1].id
+                print 'USER ID:', request.session['user_id']
+            else:
+                for key in bound_log.errors:
+                    print "KEY: ",key
+                    if key == "email" or key == "password" or key == "__all__":
+                        messages.error(request, bound_log.errors[key])
+                        return redirect('/')
+            return HttpResponseRedirect("/bills")
+        else:
+            for key in bound_log.errors:
+                print "KEY: ",key
+                if key == "email" or key == "password" or key == "__all__":
+                    messages.error(request, bound_log.errors[key])
+                    return redirect('/')
+        return redirect('/')
 
 
 # @login_required(login_url='/')

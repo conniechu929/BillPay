@@ -57,7 +57,50 @@ class RegistrationForm(forms.ModelForm):
             user.save()
         return (True, user)
 
-        
+class LogForm(forms.ModelForm):
+    email = forms.EmailField(required=True)
+    password = forms.CharField(required=True)
+
+    class Meta:
+        model = User
+        fields = ['email', 'password']
+        exclude = ['first_name', 'last_name', 'phone_number']
+
+    def clean(self):
+        email = self.cleaned_data.get('email')
+        password = self.cleaned_data['password']
+
+        try:
+            user = User.objects.get(email=email)
+        except:
+            raise ValidationError("Login fields are invalid.")
+            return (False, email)
+
+        if User.objects.get(email=email):
+            hashed = bcrypt.hashpw((password).encode(), User.objects.get(email=email).password.encode())
+            print "HASHED PW:", hashed
+            if User.objects.get(email=email).password == hashed:
+                print "CHECKING HASHED PW WITH EMAIL"
+                info = User.objects.get(email=email)
+                print "INFO RETURNED:", info
+                print "EMAIL RETURNED:", info.email
+                print "EMAIL RETURNED:", info.id
+                # return info
+            else:
+                raise ValidationError('Password does not match.')
+        else:
+            raise ValidationError('Email does not exist.')
+
+        return self.cleaned_data
+
+    def find(self):
+        email = self.cleaned_data.get('email')
+        password = self.cleaned_data['password']
+        hashed = bcrypt.hashpw((password).encode(), User.objects.get(email=email).password.encode())
+        if User.objects.get(email=self.cleaned_data.get('email')):
+            info = User.objects.get(email=email)
+            return (True, info)
+
 
 class RegisterForm(forms.Form):
     first_name = forms.CharField(max_length=45, widget=TextInput(attrs={'class': 'form-control','placeholder': 'Enter first name'}))
