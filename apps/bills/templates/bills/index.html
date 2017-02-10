@@ -29,12 +29,11 @@
               <a class="dropdown-toggle" href="#" data-toggle="dropdown" id="navLogin"><span class="glyphicon glyphicon-log-in"></span> LOGIN</a>
               <div class="dropdown-menu" style="padding:15px;width:450px;height:auto">
                 <div id='error'>
-                  {{bound_form.errors.first_name}}
-                  {{bound_form.errors.last_name}}
-                  {{bound_form.errors.email}}
-                  {{bound_form.errors.phone_number}}
-                  {{bound_form.errors.password}}
-                  {{bound_form.non_field_errors}}
+
+                  {% for message in messages %}
+                      <p>{{ message }}</p>
+                  {%endfor%}
+
                 </div>
                 <div id="signin">
                   <h2>Login To Your BillPay</h2>

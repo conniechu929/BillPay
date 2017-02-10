@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login
-# from .models import Bill
-# from .models import User
+from .models import Bill
+from .models import User
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -11,6 +11,8 @@ from django.core.urlresolvers import reverse
 from .forms import RegisterForm, LoginForm, RegistrationForm
 import bcrypt
 import forms
+import datetime
+
 
 def index(request):
     form = RegisterForm()
@@ -21,6 +23,7 @@ def index(request):
     return render(request, "bills/index.html", context)
 
 def process(request):
+
     bound_form = RegistrationForm()
 
     if request.method == "POST":
@@ -48,46 +51,72 @@ def process(request):
             for category in categories:
                 if category in errors:
                     messages.error(request, errors[category])
+
             return redirect('/')
 
         return HttpResponseRedirect('/')
-#
-# def login(request):
-#     # next = request.POST.get('next', request.GET.get('next', ''))
-#     # context = {'next': request.GET['next'] if request.GET and 'next' in request.GET else ''}
-#     if request.method == 'POST':
-#         kwargs = {
-#             'email': request.POST['email'],
-#             'password': request.POST['password'].encode()
-#         }
-#         # email = request.POST['email']
-#         # password = request.POST['password'].encode()
-#         user = authenticate(email=email, password=password)
-#         user = User.objects.login(**kwargs)
-#         if user[0] == False:
-#             messages.error(request,user[1])
-#             return redirect('/')
-#         elif user[0] == True:
-#             request.session['user_id'] = user[1].id
-#             request.session["first_name"] = user[1].first_name
-#             # if next:
-#             #     return HttpResponseRedirect(next)
-#             return redirect('/bills')
-#             # return redirect(request.POST.get('next','/bills'))
-#
-#         # if 'next' in request.POST:
-#         #     return HttpResponseRedirect(request.POST['next'], '/bills')
-#         # else:
-#         #     return HttpResponseRedirect('/')
-#     else:
-#         return redirect('/')
+
 
 # @login_required(login_url='/')
 def bills(request):
     # context = {'next': request.GET['next'] if request.GET and 'next' in request.GET else ''}
-    print request.session['user_id']
-    return render(request, 'bills/bills.html')
+    # print request.session["user_id"]
+    context = {
+        # "mybills": Bill.objects.filter(user_id = User.objects.get(id = request.session["user_id"])).order_by('date')
+    }
 
+    return render(request, 'bills/bills.html', context)
+
+
+def addBill(request):
+    if request.method == 'POST':
+        print '************'
+        print 'ID: ',request.session["user_id"]
+        print 'payday:', request.POST['payday']
+        # if len(request.POST['times']) >0:
+        #     print "TIMES IS LEMGTH IS: "
+        #     print len(request.POST['times'])
+        # print request.POST.get('undef_times', False)
+        kwargs = {
+            'user_id': request.session["user_id"],
+            'title': request.POST['title'],
+            'amount': request.POST['amount'],
+            'date': request.POST['date'],
+            'payday': request.POST['payday'],
+            'link': request.POST['link'],
+            'type': request.POST['type'],
+            'times': request.POST['times'],
+            'undef_times': request.POST.get('undef_times', False)
+        }
+        print "*"*20
+        print kwargs
+        print "*"*20
+        bill = Bill.objects.addBill(**kwargs)
+
+        if bill[0] == False:
+            for error in bill[1]:
+                messages.error(request, error)
+            return redirect('/bills')
+        elif bill[0] == True:
+            return redirect('/bills')
+    else:
+        return redirect('/bills')
+
+def markBill(request, id):
+    if request.method == 'POST':
+        kwargs = {
+            'user_id': request.session["user_id"],
+            'bill_id': id,
+        }
+        bill = Bill.objects.markBill(**kwargs)
+        if bill[0] == False:
+            for error in bill[1]:
+                messages.error(request, error)
+            return redirect('/bills')
+        elif bill[0] == True:
+            return redirect('/bills')
+    else:
+        return redirect('/bills')
 
 
 def logout(request):

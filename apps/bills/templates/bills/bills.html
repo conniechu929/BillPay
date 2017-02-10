@@ -5,13 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Bill Manager</title>
     {% load staticfiles %}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.0.3/jquery-confirm.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.0.3/jquery-confirm.min.js"></script>
     <link rel="stylesheet" type="text/css" href="{% static 'bills/css/billpay.css' %}">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="{% static 'bills/javascript/billpay.js'%}" charset="utf-8"></script>
   </head>
-  <body>
+
+  <body onload="startTime()">
     <nav class="navbar navbar-default navbar-fixed-top">
       <div class="container">
         <div class="navbar-header">
@@ -33,6 +39,9 @@
     </nav>
     <br>
     <br>
+    <h1>Welcome, {{ request.session.first_name }}</h1>
+    <div id="clock"></div>
+      <!-- Table for Bills here-->
     <div id="myBills" class="container-fluid">
       <br>
       <ul class="nav nav-pills grey">
@@ -47,23 +56,30 @@
             <table class="table table-hover">
               <thead>
                 <tr>
-                  <th>Due Date</th>
-                  <th>Bill Category</th>
-                  <th>Bill Title</th>
+                  <th>#</th>
+                  <th>Title</th>
                   <th>Amount</th>
                   <th>Link</th>
-                  <th>Occurrence</th>
+                  <th>Date</th>
+                  <th>Days till Due</th>
+                  <th>Paid</th>
                 </tr>
               </thead>
               <tbody>
+                {% for bill in mybills %}
                 <tr>
-                  <td>02/18/2017</td>
-                  <td>Cellular</td>
-                  <td>Verizon</td>
-                  <td>100.20</td>
-                  <td><a href="www.verizon.com"></a> Pay at Verizon</td>
-                  <td>Monthly</td>
+                  <td>{{forloop.counter}}</td>
+                  <td>{{bill.title}}</td>
+                  <td>${{bill.amount}}0</td>
+                  <td><a href="{{bill.link}}">Link here</a></td>
+                  <td class="color_row">{{bill.date|date:"m-d-Y"}}</td>
+                  <td><form class="markbill" action="/markbill/{{bill.id}}" method="post">
+                    {% csrf_token %}
+                    <input class="marked"  type="checkbox" name="paid" value="{{bill.title}}">
+                    <input type="submit" hidden value="SUBMIT">
+                  </form><td>
                 </tr>
+                {% endfor %}
               </tbody>
             </table>
           </div>
@@ -78,5 +94,40 @@
         </div>
       </div>
     </div>
-  </body>
+
+    <div class="container">
+    <button type="button" data-toggle="modal" data-target="#NewItemForm">Add a New Bill</button>
+    <!-- Modal -->
+    <div class="modal fade" id="NewItemForm" role="dialog">
+      <div class="modal-dialog modal-sm">
+        <!-- Modal content-->
+        <div id='errorBox'>
+          {% for message in messages %}
+          <p style="color:red;">{{message}}</p>
+          {% endfor %}
+        </div>
+        <h4 class="modal-title">Add a New Bill</h4><br>
+        <form class="register" id="addform" action="/newbill" method="post">
+          {% csrf_token %}
+          <li>Title: </li><input type="text" name="title">
+          <li>Amount: </li><input type="number" step='0.01' name="amount">
+          <li>Date: </li><input type="date" id="date" name="date" min="2017-02-01">
+          <input type="text" hidden id="payday" name="payday" value="">
+          <li>Link to pay: </li><input type="url" name="link">
+          <li>Payment type</li>
+          <select id="selector" name="type">
+            <option value="default">Select type</option>
+            <option value="monthly">Monthly Payment</option>
+            <option value="onetime">One time Payment</option>
+          </select>
+          <div id="hiddenform" style="display: none;">
+            <li>How many months?: </li><input id="monthsInput" type="number" name="times" min="2">
+            <input id="checkbox" type="checkbox" name="undef_times" value="9999"> I dont know exactly<br>
+          </div>
+          <input type="submit" value="Add Bill">
+        </form>
+      </div>
+    </div>
+  </div>
+</body>
 </html>

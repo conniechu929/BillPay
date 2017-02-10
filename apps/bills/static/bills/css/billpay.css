@@ -1,6 +1,10 @@
 ul li{
   list-style-type: none;
 }
+.red {
+  color: red;
+  font-size: 14px;
+}
 
 .navbar navbar-default navbar-fixed-top{
   position: absolute;
@@ -106,6 +110,30 @@ ul li{
     background-color: grey !important;
 }
 
+/*ol ol, ol ul, ul ol, ul ul {
+  color: red !important;
+}*/
+
 #error:first-child{
   color:red;
 }
+
+/*#error p{
+  color: red;
+}
+
+#error:target{
+  color: yellow !important;
+}
+
+#error:target li{
+  color: blue;
+}
+
+#error:target:target{
+  color: green;
+}*/
+
+/*#error ul li{
+  color: green;
+}*/
