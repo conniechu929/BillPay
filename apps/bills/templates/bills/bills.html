@@ -24,20 +24,59 @@
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="#about">Account</a></li>
-            <li><a href="#portfolio">History</a></li>
-            <li><a href="#contact">CONTACT</a></li>
-            <li><a href="#"><span class="glyphicon glyphicon-log-out"></span>Logout</a></li>
+            <li><a href="#about">SETTINGS</a></li>
+            <li><a href="#portfolio">HISTORY</a></li>
+            <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
           </ul>
         </div>
       </div>
     </nav>
-
-    <div id="billTitle" class="container-fluid">
-
-    </div>
+    <br>
+    <br>
     <div id="myBills" class="container-fluid">
+      <br>
+      <ul class="nav nav-pills grey">
+        <li class="active"><a data-toggle="pill" href="#current">Current Bills</a></li>
+        <li><a data-toggle="pill" href="#last-month">Last month</a></li>
+        <li><a data-toggle="pill" href="#past">Past history</a></li>
+      </ul>
 
+      <div class="tab-content">
+        <div id="current" class="tab-pane fade in active">
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>Due Date</th>
+                  <th>Bill Category</th>
+                  <th>Bill Title</th>
+                  <th>Amount</th>
+                  <th>Link</th>
+                  <th>Occurrence</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>02/18/2017</td>
+                  <td>Cellular</td>
+                  <td>Verizon</td>
+                  <td>100.20</td>
+                  <td><a href="www.verizon.com"></a> Pay at Verizon</td>
+                  <td>Monthly</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div id="last-month" class="tab-pane fade">
+            <h3>Menu 1</h3>
+            <p>Some content in menu 1.</p>
+        </div>
+        <div id="past" class="tab-pane fade">
+            <h3>Menu 2</h3>
+            <p>Some content in menu 2.</p>
+        </div>
+      </div>
     </div>
   </body>
 </html>

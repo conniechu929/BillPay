@@ -1,10 +1,12 @@
 from django.conf.urls import url
 from . import views
+from django.conf import settings
 
 urlpatterns = [
     url(r'^$', views.index),
     url(r'^process$', views.process),
-    url(r'^login$', views.login),
+    url(r'^login$', views.login, name='login'),
     url(r'^logout$', views.logout),
     url(r'^bills$', views.bills)
+
 ]

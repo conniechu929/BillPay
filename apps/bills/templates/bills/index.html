@@ -4,42 +4,185 @@
     <meta charset="utf-8">
     <title>BillPay</title>
     {% load staticfiles %}
-  	<link rel="stylesheet" type="text/css" href="{% static 'bills/css/billpay.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'bills/css/billpay.css' %}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="{% static 'bills/javascript/billpay.js'%}" charset="utf-8"></script>
   </head>
   <body>
-    <div id='Error'>
-      {% for message in messages %}
-      <p>{{message}}</p>
-      {% endfor %}
-  	</div>
-  	<div id='container'>
-  		<form class'register' action='/process' method='post'>
-  		  {% csrf_token %}
-        <fieldset>
-          <legend>Registration</legend>
-          <ul>
-            <li>First Name: </li><input type="text" name="first_name">
-            <li>Last Name: </li><input type="text" name="last_name">
-            <li>Email Address: </li><input type="text" name="email">
-            <li>Phone Number: </li><input type="tel" name="phone_number">
-            <li>Password: </li><input type="password" name="password">
-            <li>Confirm Password: </li><input type="password" name="confirm_pw">
+    <nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">BillPay: A new way to manage your bills</a>
+        </div>
+        <div class="collapse navbar-collapse" id="myNavbar">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="#billAboutUs">ABOUT</a></li>
+            <li><a href="#billContact">CONTACT</a></li>
+            <li class="dropdown" id="menuLogin">
+              <a class="dropdown-toggle" href="#" data-toggle="dropdown" id="navLogin"><span class="glyphicon glyphicon-log-in"></span> LOGIN</a>
+              <div class="dropdown-menu" style="padding:15px;width:450px;height:auto">
+                <div id='error'>
+                  {{bound_form.errors.first_name}}
+                  {{bound_form.errors.last_name}}
+                  {{bound_form.errors.email}}
+                  {{bound_form.errors.phone_number}}
+                  {{bound_form.errors.password}}
+                  {{bound_form.non_field_errors}}
+                </div>
+                <div id="signin">
+                  <h2>Login To Your BillPay</h2>
+                  <form class="form-horizontal" action="/login" method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                      <label class="control-label col-sm-2" for="email">Email:</label>
+                      <div class="col-sm-10">
+                        <!-- <input type="email" class="form-control" id="email" name="email" placeholder="Enter email"> -->
+                        {{logForm.email}}
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="control-label col-sm-2" for="pwd">Password:</label>
+                      <div class="col-sm-10">
+                        <!-- <input type="password" class="form-control" id="pwd" name="password" placeholder="Enter password"> -->
+                        {{logForm.password}}
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="col-sm-offset-2 col-sm-10">
+                        <div class="checkbox">
+                          <label><input type="checkbox"> Remember me</label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="col-sm-offset-2 col-sm-10">
+                        <input type="hidden" name="next" value="{{ next }}">
+                        <button type="submit" class="btn btn-default" id='loginbutton'>Login</button>
+                      </div>
+                    </div>
+                    <a href="#" class='register-toggle'>Not a member yet?</a>
+                  </form>
+                </div>
+                <div id='registration' style="display:none;">
+                  <h2>Create a free account</h2>
+                  <form class="form-horizontal" action="/process" method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                      <label class="control-label col-sm-5" for="first_name">First Name:</label>
+                      <div class="col-sm-6">
+                        <!-- <input type="text" class="form-control" name="first_name" placeholder="Enter first name"> -->
+                        {{regForm.first_name}}
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="control-label col-sm-5" for="last_name">Last Name:</label>
+                      <div class="col-sm-6">
+                        <!-- <input type="text" class="form-control" name="last_name" placeholder="Enter last name"> -->
+                        {{regForm.last_name}}
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="control-label col-sm-5" for="email">Email:</label>
+                      <div class="col-sm-6">
+                        <!-- <input type="email" class="form-control" name="email" placeholder="Enter email"> -->
+                        {{regForm.email}}
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="control-label col-sm-5" for="phone_number">Phone Number:</label>
+                      <div class="col-sm-6">
+                        <!-- <input type="text" class="form-control" name="phone_number" placeholder="Enter phone number"> -->
+                        {{regForm.phone_number}}
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="control-label col-sm-5" for="password">Password:</label>
+                      <div class="col-sm-6">
+                        <!-- <input type="password" class="form-control" name="password" placeholder="Enter password"> -->
+                        {{regForm.password}}
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="control-label col-sm-5" for="confirm_password">Confirm Password:</label>
+                      <div class="col-sm-6">
+                        <!-- <input type="password" class="form-control" name="confirm_pw" placeholder="Enter password"> -->
+                        {{regForm.confirm_password}}
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="col-sm-offset-2 col-sm-10">
+                        <div class="checkbox">
+                          <label><input type="checkbox"> Remember me</label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="col-sm-offset-2 col-sm-10">
+                        <button type="submit" class="btn btn-default">Submit</button>
+                      </div>
+                    </div>
+                    <a href="#" class='signin-toggle'>Already registered?</a>
+                  </form>
+                </div>
+              </div>
+            </li>
           </ul>
-    			<input type="submit" value="Submit">
-        </fieldset>
-  		</form>
-  		<br>
-  		<form class='register' action='/login' method='post'>
-  		  {% csrf_token %}
-        <fieldset>
-          <legend>Login</legend>
-          <ul>
-            <li>Email Address: </li><input type="text" name="email">
-            <li>Password: </li><input type="password" name="password">
-          </ul>
-    			<input type="submit" value="Login">
-        </fieldset>
-  		</form>
-  	</div>
+        </div>
+      </div>
+    </nav>
+
+    <div id="billTitle" class="container-fluid">
+      <h1 class="welcome">Welcome To BillPay</h1>
+      <h5 class="welcome-message"><b>A smarter way to manage your bills.</b></h5>
+    </div>
+
+    <div id="billAboutUs" class="container-fluid">
+      <h1 class="about">About BillPay</h1>
+      <br>
+      <p>We all have been there at one point or another when things just get too hectic and some things tend to slip our minds.
+      Keeping track of all the bills on top of sifting through all the paperwork can be a hassle and time consuming. We created BillPay to help
+      manage, keep track, and pay bills all in one convenient place so you don't have to.
+      </p>
+      <img id="aboutUsPic" src="/static/bills/images/about.jpeg" alt="" style='height: 60%; width: 80%; object-fit: contain'/>
+    </div>
+    <div id="billService" class="container-fluid">
+      <h1 class="service">Our Services</h1>
+      <h3>Helping to...</h3>
+      <br>
+      <br>
+      <div id="bank">
+        <span class="glyphicon glyphicon-piggy-bank logo"></span>
+        <h4>Pay bills smarter</h4>
+      </div>
+      <br>
+      <br>
+      <div id="manage">
+        <span class="glyphicon glyphicon-paperclip logo"></span>
+        <h4>Manage paperwork</h4>
+      </div>
+      <br>
+      <br>
+      <div id="track">
+        <span class="glyphicon glyphicon-time logo"></span>
+        <h4>Keep track of payments</h4>
+      </div>
+    </div>
+    <div id="billContact">
+      <br>
+      <h1 class="contact">Contact Us</h1>
+      <div id="contactInfo">
+        <h3>You can reach us: </h3>
+        <p><span class="glyphicon glyphicon-map-marker logo-small"></span> San Francisco, CA</p>
+        <p><span class="glyphicon glyphicon-phone logo-small"></span> ...</p>
+        <p><span class="glyphicon glyphicon-envelope logo-small"></span> ...</p>
+      </div>
+    </div>
   </body>
 </html>
