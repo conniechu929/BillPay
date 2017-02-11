@@ -23,6 +23,11 @@ def index(request):
     return render(request, "bills/index.html", context)
 
 def process(request):
+    try:
+        if request.method == "GET":
+            return redirect('/')
+    except:
+        return request.POST
 
     bound_form = RegistrationForm()
 
@@ -57,6 +62,12 @@ def process(request):
         return HttpResponseRedirect('/')
 
 def login(request):
+    try:
+        if request.method == "GET":
+            return redirect('/')
+    except:
+        return request.POST
+
     bound_log = LogForm()
 
     if request.method == "POST":
@@ -85,6 +96,10 @@ def login(request):
 
 # @login_required(login_url='/')
 def bills(request):
+    try:
+        request.session['user_id']
+    except:
+        return redirect('/')
     # context = {'next': request.GET['next'] if request.GET and 'next' in request.GET else ''}
     # print request.session["user_id"]
     context = {
@@ -95,6 +110,12 @@ def bills(request):
 
 
 def addBill(request):
+    try:
+        if request.method == "GET":
+            return redirect('/')
+    except:
+        return request.POST
+
     if request.method == 'POST':
         print '************'
         print 'ID: ',request.session["user_id"]
@@ -129,6 +150,12 @@ def addBill(request):
         return redirect('/bills')
 
 def markBill(request, id):
+    try:
+        if request.method == "GET":
+            return redirect('/')
+    except:
+        return request.POST
+        
     if request.method == 'POST':
         kwargs = {
             'user_id': request.session["user_id"],
