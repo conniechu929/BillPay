@@ -105,35 +105,32 @@ ul li{
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fef9f2', endColorstr='#eae7de',GradientType=0 );
 }
 
+#front_page {
+  background-image: url("/static/bills/images/front_page.jpeg");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+
 .grey .active a,
 .grey .active a:hover {
     background-color: grey !important;
 }
 
-/*ol ol, ol ul, ul ol, ul ul {
-  color: red !important;
-}*/
-
 #error:first-child{
   color:red;
 }
 
-/*#error p{
-  color: red;
+.modal-title {
+  font-size: 2.3vw;
+  color: white;
 }
 
-#error:target{
-  color: yellow !important;
+.bill_form {
+  color: white;
+  list-style: none;
+  font-size: 1.3vw;
 }
 
-#error:target li{
-  color: blue;
+.tab {
+  color: grey;
 }
-
-#error:target:target{
-  color: green;
-}*/
-
-/*#error ul li{
-  color: green;
-}*/

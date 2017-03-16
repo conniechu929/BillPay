@@ -1,18 +1,15 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
-from django.contrib.auth import authenticate, login
 from .models import Bill
 from .models import User
 from django.contrib.auth.models import User
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
 from django.conf import settings
-from django.core.urlresolvers import reverse
 from .forms import RegisterForm, LoginForm, RegistrationForm, LogForm
 import bcrypt
 import forms
 import datetime
-
+from datetime import datetime
 
 def index(request):
     form = RegisterForm()
@@ -77,6 +74,7 @@ def login(request):
             info = bound_log.find()
             if info[0] == True:
                 request.session['user_id'] = info[1].id
+                request.session['first_name'] = info[1].first_name
                 print 'USER ID:', request.session['user_id']
             else:
                 for key in bound_log.errors:
@@ -93,20 +91,27 @@ def login(request):
                     return redirect('/')
         return redirect('/')
 
-
-# @login_required(login_url='/')
 def bills(request):
     try:
         request.session['user_id']
+        try:
+            context = {
+                "mybills": Bill.objects.filter(user_id = request.session["user_id"]).order_by('date')
+            }
+        except:
+            context = {}
     except:
         return redirect('/')
-    # context = {'next': request.GET['next'] if request.GET and 'next' in request.GET else ''}
-    # print request.session["user_id"]
-    context = {
-        # "mybills": Bill.objects.filter(user_id = User.objects.get(id = request.session["user_id"])).order_by('date')
-    }
 
-    return render(request, 'bills/bills.html', context)
+
+    # billmonth = Bill.objects.filter(user_id = request.session["user_id"]).order_by('date')
+    month = datetime.now().month
+
+    previous = month - 1
+
+    nextmonth = month + 1
+
+    return render(request, 'bills/bills.html', context, nextmonth)
 
 
 def addBill(request):
@@ -117,9 +122,7 @@ def addBill(request):
         return request.POST
 
     if request.method == 'POST':
-        print '************'
-        print 'ID: ',request.session["user_id"]
-        print 'payday:', request.POST['payday']
+
         # if len(request.POST['times']) >0:
         #     print "TIMES IS LEMGTH IS: "
         #     print len(request.POST['times'])
@@ -135,9 +138,7 @@ def addBill(request):
             'times': request.POST['times'],
             'undef_times': request.POST.get('undef_times', False)
         }
-        print "*"*20
-        print kwargs
-        print "*"*20
+
         bill = Bill.objects.addBill(**kwargs)
 
         if bill[0] == False:
@@ -155,7 +156,7 @@ def markBill(request, id):
             return redirect('/')
     except:
         return request.POST
-        
+
     if request.method == 'POST':
         kwargs = {
             'user_id': request.session["user_id"],

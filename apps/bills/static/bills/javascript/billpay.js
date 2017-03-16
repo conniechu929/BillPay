@@ -3,10 +3,6 @@ var day = today.getDate();
 var mon = new String(today.getMonth()+1);
 var year = today.getFullYear();
 
-
-
-
-
 function startTime() {
   var monthes = ["January","February","March","April","May","June","July","August","September","October","November","December"]
   var month = monthes[today.getMonth()];
@@ -100,25 +96,26 @@ $(document).ready(function() {
   var date = new String( year + '-' + mon + '-' + day_to_s );
   input.setAttribute('min', date);
 
+
 //making a confirm pop up window for payed bills
-  $('.marked').on('change', function () {
-    if (this.checked) {
-      var $this = $(this);
-      var form = $this.parents("form");
-      $.confirm({
-        title: 'Please Confirm',
-        content: 'Are you sure, that you want to mark ' + this.value + ' as paid?',
-        buttons: {
-            confirm: function () {
-              form.submit();
-            },
-            cancel: function () {
-              $this.prop('checked', false);
-            },
-        }
-      });
-    }
-  });
+$('.marked').on('change', function () {
+    if (this.checked) {
+      var $this = $(this);
+      var form = $this.parents("form");
+      $.confirm({
+        title: 'Please Confirm',
+        content: 'Are you sure, that you want to mark ' + this.value + ' as paid?',
+        buttons: {
+            confirm: function () {
+              form.submit();
+            },
+            cancel: function () {
+              $this.prop('checked', false);
+            },
+        }
+      });
+    }
+  });
 
 //catching a day from the datefield to save in DB
   document.getElementById("date").oninput = function() {
@@ -136,7 +133,6 @@ $('.color_row').each(function() {
   var date = new Date($this.html());
   var timeDiff = Math.abs(date.getTime() - today.getTime());;
   var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
-  console.log(diffDays);
   if(Math.abs(date.getTime())< Math.abs(today.getTime())){
     $this.after('<td> Due </td>');
     $this.closest('tr').addClass("danger");
