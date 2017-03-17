@@ -24,7 +24,6 @@ def validName(value):
             '{} must be letters'.format(value)
         )
 
-
 def validEmail(value):
     if not EMAIL_REGEX.match(value):
         raise ValidationError(
@@ -75,9 +74,9 @@ class BillManager(models.Manager):
 
     def markBill(self, **kwargs):
         months = [29, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
-        # history_bill = History.objects.create(user_id=User.objects.get(id=kwargs['user_id']), bill_id=Bill.ojects.get(id=kwargs['bill_id']))
-        # history_bill.save()
         bill = Bill.objects.get(id=kwargs['bill_id'])
+        history_bill = History.objects.create(user_id=User.objects.get(id=kwargs['user_id']), title=bill.title, amount=bill.amount, link=bill.link)
+        history_bill.save()
         bill.times = bill.times - 1
         if bill.times > 0:
             bill.date = bill.date + relativedelta(months=+1)
@@ -89,7 +88,7 @@ class BillManager(models.Manager):
         else:
             bill. delete()
         # deleting all records
-        # bill = Bill.objects.all()
+        # bill = History.objects.all()
         # bill.delete()
         return (True, bill)
 
@@ -122,6 +121,8 @@ class Bill(models.Model):
 
 class History(models.Model):
     user_id = models.ForeignKey(User)
-    bill_id = models.ForeignKey(Bill)
+    title = models.CharField(max_length=200)
+    amount = models.FloatField(null=True)
+    link = models.CharField(max_length=200)
     created_at = models.DateTimeField(auto_now_add = True)
     updated_at = models.DateTimeField(auto_now = True)
