@@ -35,10 +35,12 @@ def process(request):
             user = bound_form.save()
             if user[0] == True:
                 request.session['user_id'] = user[1].id
+                request.session['first_name'] = user[1].first_name
                 print 'USER ID:', request.session['user_id']
             else:
                 messages.error(request, "Unable to save user info.")
                 return redirect('/')
+                # return HttpResponse('/')
             return HttpResponseRedirect("/bills")
 
         else:
@@ -55,7 +57,7 @@ def process(request):
                     messages.error(request, errors[category])
 
             return redirect('/')
-
+            # return HttpResponse('/')
         return HttpResponseRedirect('/')
 
 def login(request):
@@ -103,15 +105,7 @@ def bills(request):
     except:
         return redirect('/')
 
-
-    # billmonth = Bill.objects.filter(user_id = request.session["user_id"]).order_by('date')
-    month = datetime.now().month
-
-    previous = month - 1
-
-    nextmonth = month + 1
-
-    return render(request, 'bills/bills.html', context, nextmonth)
+    return render(request, 'bills/bills.html', context)
 
 
 def addBill(request):

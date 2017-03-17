@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="{% static 'bills/javascript/billpay.js'%}" charset="utf-8"></script>
+    <script src="{% static 'bills/javascript/frontpage.js'%}" charset="utf-8"></script>
   </head>
   <body>
     <nav class="navbar navbar-default navbar-fixed-top">
@@ -26,12 +26,15 @@
             <li><a href="#billAboutUs">ABOUT</a></li>
             <li><a href="#billContact">CONTACT</a></li>
             <li class="dropdown" id="menuLogin">
+              {% if request.session.user_id %}
+                <a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a>
+              {% else %}
               <a class="dropdown-toggle" href="#" data-toggle="dropdown" id="navLogin"><span class="glyphicon glyphicon-log-in"></span> LOGIN</a>
               <div class="dropdown-menu" style="padding:15px;width:450px;height:auto">
                 <div id='error'>
 
                   {% for message in messages %}
-                      <p>{{ message }}</p>
+                      <p id='error_message'>{{ message }}</p>
                   {%endfor%}
 
                 </div>
@@ -132,6 +135,7 @@
                 </div>
               </div>
             </li>
+            {% endif %}
           </ul>
         </div>
       </div>

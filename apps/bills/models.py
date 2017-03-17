@@ -24,6 +24,7 @@ def validName(value):
             '{} must be letters'.format(value)
         )
 
+
 def validEmail(value):
     if not EMAIL_REGEX.match(value):
         raise ValidationError(

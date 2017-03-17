@@ -97,7 +97,7 @@ ul li{
 }
 
 #myBills {
-  height: 300px;
+  height: auto;
   background: rgb(254,249,242);
   background: -moz-linear-gradient(top,  rgba(254,249,242,1) 0%, rgba(234,231,222,1) 100%);
   background: -webkit-linear-gradient(top,  rgba(254,249,242,1) 0%,rgba(234,231,222,1) 100%);
@@ -109,6 +109,8 @@ ul li{
   background-image: url("/static/bills/images/front_page.jpeg");
   background-repeat: no-repeat;
   background-size: 100% 100%;
+  height: 70vh;
+  color: white;
 }
 
 .grey .active a,

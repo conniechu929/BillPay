@@ -32,18 +32,29 @@ $(document).ready(function() {
         $("nav").removeClass('opacity');
       }
     });
-
-    $('.signin-toggle').click(function() {
-      $("#registration").slideUp("slow", function() {
-        $("#signin").slideDown("slow");
-      });
-    });
-
-    $('.register-toggle').click(function() {
-      $("#signin").slideUp("slow", function() {
-        $("#registration").slideDown("slow");
-      });
-    });
+    //
+    // // $('#error').addEventListener("change", function() {
+    // //   console.log("LISTENING FOR ERROR")
+    // //   $("#signin").slideDown("slow");
+    // // });g
+    // console.log('outsie');
+    // if($('#error').not(':empty')){
+    //   console.log("LISTENING FOR ERROR")
+    //   $("#signin").slideDown("slow");
+    // }
+    //
+    //
+    // $('.signin-toggle').click(function() {
+    //   $("#registration").slideUp("slow", function() {
+    //     $("#signin").slideDown("slow");
+    //   });
+    // });
+    //
+    // $('.register-toggle').click(function() {
+    //   $("#signin").slideUp("slow", function() {
+    //     $("#registration").slideDown("slow");
+    //   });
+    // });
 
     $("#navLogin").click(function() {
       $("nav").removeClass('opacity');
