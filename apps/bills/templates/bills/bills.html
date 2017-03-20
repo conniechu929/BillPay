@@ -10,8 +10,8 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.0.3/jquery-confirm.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.0.3/jquery-confirm.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="{% static 'bills/css/bill.css' %}">
-    <script src="{% static 'bills/javascript/billpay.js'%}" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'bills/css/bills.css' %}">
+    <script src="{% static 'bills/javascript/bill_pay.js'%}" charset="utf-8"></script>
   </head>
 
   <body onload="startTime()">
@@ -47,14 +47,16 @@
       <br><br>
       <ul class="nav nav-pills grey">
         <li class="active"><a data-toggle="pill" href="#current" class="tab">Current Bills</a></li>
-        <li><a data-toggle="pill" href="#last-month" class="tab">Last month</a></li>
         <li><a data-toggle="pill" href="#past" class="tab">Past history</a></li>
       </ul>
 
       <div class="tab-content">
         <div id="current" class="tab-pane fade in active">
           <div class="table-responsive">
-            <table class="table table-hover">
+            <h3>Current bills</h3>
+            <input type="text" id="name_search" onkeyup="searchByName( 'name_search', 'current_bills')" placeholder="Search by Name">
+
+            <table id='current_bills' class="table table-hover">
               <thead>
                 <tr>
                   <th>#</th>
@@ -85,38 +87,35 @@
             </table>
           </div>
         </div>
-        <div id="last-month" class="tab-pane fade">
-            <h3>Last Month Bills</h3>
+        <div id="past" class="tab-pane fade">
+            <h3>History of bills</h3>
+            <input type="text" id="past_name_search" onkeyup="searchByName('past_name_search', 'past_bills')" placeholder="Search by Name">
             <div class="table-responsive">
-              <table class="table table-hover">
+              <table id='past_bills' class="table table-hover">
                 <thead>
                   <tr>
                     <th>#</th>
                     <th>Title</th>
                     <th>Amount</th>
                     <th>Link</th>
-                    <th>Date</th>
+                    <th>Paid On</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {% for bill in mybills %}
+                  {% for bill in past_bills %}
                   <tr>
 
-                      <td>{{forloop.counter}}</td>
-                      <td>{{bill.title}}</td>
-                      <td>${{bill.amount}}0</td>
+                      <td>{{ forloop.counter }}</td>
+                      <td>{{ bill.title }}</td>
+                      <td>${{ bill.amount }}0</td>
                       <td><a href="{{bill.link}}">Link here</a></td>
-                      <td class="color_row">{{bill.date|date:"m-d-Y"}}</td>
+                      <td>{{bill.created_at|date:"m-d-Y"}}</td>
                   </tr>
 
                   {% endfor %}
                 </tbody>
               </table>
             </div>
-        </div>
-        <div id="past" class="tab-pane fade">
-            <h3>History of bills</h3>
-
         </div>
       </div>
 
@@ -135,7 +134,7 @@
             {% csrf_token %}
             <li class="bill_form">Title: </li><input type="text" name="title">
             <li class="bill_form">Amount: </li><input type="number" step='0.01' name="amount">
-            <li class="bill_form">Date: </li><input type="date" id="date" name="date" min="2017-02-01">
+            <li class="bill_form">Date: </li><input type="date" id="date" name="date">
             <input type="text" hidden id="payday" name="payday" value="">
             <li class="bill_form">Link to pay: </li><input type="url" name="link">
             <li class="bill_form">Payment type</li>

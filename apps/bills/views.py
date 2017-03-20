@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from .models import Bill
+from .models import History
 from .models import User
 from django.contrib.auth.models import User
 from django.contrib import messages
@@ -40,7 +41,6 @@ def process(request):
             else:
                 messages.error(request, "Unable to save user info.")
                 return redirect('/')
-                # return HttpResponse('/')
             return HttpResponseRedirect("/bills")
 
         else:
@@ -57,7 +57,7 @@ def process(request):
                     messages.error(request, errors[category])
 
             return redirect('/')
-            # return HttpResponse('/')
+
         return HttpResponseRedirect('/')
 
 def login(request):
@@ -94,11 +94,15 @@ def login(request):
         return redirect('/')
 
 def bills(request):
+    print '*********************'
+    lol = History.objects.filter(user_id = request.session["user_id"])
+    print lol
     try:
         request.session['user_id']
         try:
             context = {
-                "mybills": Bill.objects.filter(user_id = request.session["user_id"]).order_by('date')
+                "mybills": Bill.objects.filter(user_id = request.session["user_id"]).order_by('date'),
+                "past_bills": History.objects.filter(user_id = request.session["user_id"]).order_by('-created_at')
             }
         except:
             context = {}

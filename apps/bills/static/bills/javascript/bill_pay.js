@@ -2,7 +2,6 @@ var today = new Date();
 var day = today.getDate();
 var mon = new String(today.getMonth()+1);
 var year = today.getFullYear();
-
 function startTime() {
   var monthes = ["January","February","March","April","May","June","July","August","September","October","November","December"]
   var month = monthes[today.getMonth()];
@@ -14,7 +13,6 @@ function startTime() {
   second = checkTime(second);
   document.getElementById('clock').innerHTML = "<h4>Today is: " + month + " " + day + ", " + year+ ". Time: " + hour + ":" + minute + ":" + second + "</h4>";
   var t = setTimeout(startTime, 500);
-
 }
 
 function checkTime(i) {
@@ -32,38 +30,13 @@ $(document).ready(function() {
         $("nav").removeClass('opacity');
       }
     });
-    //
-    // // $('#error').addEventListener("change", function() {
-    // //   console.log("LISTENING FOR ERROR")
-    // //   $("#signin").slideDown("slow");
-    // // });g
-    // console.log('outsie');
-    // if($('#error').not(':empty')){
-    //   console.log("LISTENING FOR ERROR")
-    //   $("#signin").slideDown("slow");
-    // }
-    //
-    //
-    // $('.signin-toggle').click(function() {
-    //   $("#registration").slideUp("slow", function() {
-    //     $("#signin").slideDown("slow");
-    //   });
-    // });
-    //
-    // $('.register-toggle').click(function() {
-    //   $("#signin").slideUp("slow", function() {
-    //     $("#registration").slideDown("slow");
-    //   });
-    // });
 
-    $("#navLogin").click(function() {
-      $("nav").removeClass('opacity');
-    });
 
   var selector = document.getElementById("selector");
   var checkbox = document.getElementById("checkbox");
   var errorBox = document.getElementById("errorBox");
   var input = document.getElementById("date");
+
   function isEmpty( el ){
       return !$.trim(el.html())
   }
@@ -78,6 +51,10 @@ $(document).ready(function() {
     }
   });
 
+
+
+
+
 //fading in and out months input if checkbox is checked
   checkbox.addEventListener('change', function () {
     if (checkbox.checked) {
@@ -90,7 +67,6 @@ $(document).ready(function() {
 
 //apearing a modal window if having validation errors
   if(isEmpty($('#errorBox'))){
-    console.log('No errors so far');
   }
   else {
     $('#NewItemForm').modal('show');
@@ -105,7 +81,9 @@ $(document).ready(function() {
     day_to_s = "0" + day_to_s;
   }
   var date = new String( year + '-' + mon + '-' + day_to_s );
-  input.setAttribute('min', date);
+
+  // DONT FORGET TO UNCOMMENT!!!!
+  // input.setAttribute('min', date);
 
 
 //making a confirm pop up window for payed bills
@@ -166,4 +144,32 @@ $('.color_row').each(function() {
   }
 
   });
+
+
+
+
+
 });
+
+
+
+function searchByName(input_id, table_id) {
+  // Declare variables
+  var input, filter, table, tr, td, i;
+  input = document.getElementById(input_id);
+  filter = input.value.toUpperCase();
+  table = document.getElementById(table_id);
+  tr = table.getElementsByTagName("tr");
+
+  // Loop through all table rows, and hide those who don't match the search query
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[1];
+    if (td) {
+      if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }
+  }
+};

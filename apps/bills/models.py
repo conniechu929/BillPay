@@ -3,10 +3,12 @@ from django.forms import ModelForm
 from django.db import models
 from django.core.exceptions import ValidationError
 from datetime import date
+# from timezone_field import TimeZoneField
 from dateutil.relativedelta import relativedelta
 
 import bcrypt
 import re
+# import arrow
 
 EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$')
 NAME_REGEX = re.compile(r'^[a-zA-Z]+$')
@@ -23,7 +25,6 @@ def validName(value):
         raise ValidationError(
             '{} must be letters'.format(value)
         )
-
 
 def validEmail(value):
     if not EMAIL_REGEX.match(value):
@@ -45,6 +46,9 @@ def passLength(value):
         raise ValidationError(
             'Password must be longer than 8 characters.'
         )
+
+
+
 
 class BillManager(models.Manager):
     def addBill(self, **kwargs):
@@ -69,15 +73,16 @@ class BillManager(models.Manager):
                 bill = Bill.objects.create(user_id=User.objects.get(id=kwargs['user_id']), title=kwargs['title'], amount=kwargs['amount'], date=kwargs['date'], payday=kwargs['payday'], link=kwargs['link'], times= 1)
                 bill.save()
             # bill.save()
+            schedule_reminder(bill)
             print bill," has been saved!"
             print "**********************"
             return (True, bill)
 
     def markBill(self, **kwargs):
         months = [29, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
-        # history_bill = History.objects.create(user_id=User.objects.get(id=kwargs['user_id']), bill_id=Bill.ojects.get(id=kwargs['bill_id']))
-        # history_bill.save()
         bill = Bill.objects.get(id=kwargs['bill_id'])
+        history_bill = History.objects.create(user_id=User.objects.get(id=kwargs['user_id']), title=bill.title, amount=bill.amount, link=bill.link)
+        history_bill.save()
         bill.times = bill.times - 1
         if bill.times > 0:
             bill.date = bill.date + relativedelta(months=+1)
@@ -89,7 +94,7 @@ class BillManager(models.Manager):
         else:
             bill. delete()
         # deleting all records
-        # bill = Bill.objects.all()
+        # bill = History.objects.all()
         # bill.delete()
         return (True, bill)
 
@@ -120,8 +125,28 @@ class Bill(models.Model):
 
     objects = BillManager()
 
+    def schedule_reminder(self):
+        """Schedules a Celery task to send a reminder about this appointment"""
+
+        # Calculate the correct time to send this reminder
+        appointment_time = self.date
+        # reminder_time = appointment_time.replace(days=-settings.REMINDER_TIME)
+        date = datetime.datetime.now().date()
+        # Schedule the Celery task
+        from .tasks import send_sms_reminder
+        ololo = appointment_time - date
+        print "###############"
+        print ololo
+        if (appointment_time - date) == settings.REMINDER_TIME:
+            result = send_sms_reminder.apply_async((self.pk), eta=settings.REMINDER_TIME)
+            print "RESULT ID FROM MODEL",result.id
+            return result.id
+
+
 class History(models.Model):
     user_id = models.ForeignKey(User)
-    bill_id = models.ForeignKey(Bill)
+    title = models.CharField(max_length=200)
+    amount = models.FloatField(null=True)
+    link = models.CharField(max_length=200)
     created_at = models.DateTimeField(auto_now_add = True)
     updated_at = models.DateTimeField(auto_now = True)

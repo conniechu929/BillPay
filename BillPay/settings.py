@@ -16,6 +16,8 @@ from django.conf import global_settings
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+TWILIO_NUMBER = os.environ.get("+14156718046")
+# TWILIO_NUMBER = "+14156718046"
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
@@ -28,7 +30,10 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+BROKER_URL = 'amqp://guest:guest@localhost:5672//'
+BROKER_POOL_LIMIT = 8
 
+REMINDER_TIME = 5
 # Application definition
 
 INSTALLED_APPS = [
