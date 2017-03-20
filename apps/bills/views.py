@@ -1,15 +1,12 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
-from .models import Bill
-from .models import History
-from .models import User
+from .models import Bill, History, User
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.conf import settings
 from .forms import RegisterForm, LoginForm, RegistrationForm, LogForm
 import bcrypt
 import forms
-import datetime
 from datetime import datetime
 
 def index(request):
@@ -94,9 +91,6 @@ def login(request):
         return redirect('/')
 
 def bills(request):
-    print '*********************'
-    lol = History.objects.filter(user_id = request.session["user_id"])
-    print lol
     try:
         request.session['user_id']
         try:
@@ -169,6 +163,41 @@ def markBill(request, id):
             return redirect('/bills')
     else:
         return redirect('/bills')
+
+def searchDate(request):
+    try:
+        request.session['user_id']
+        print request.session['user_id']
+        if request.method == 'POST':
+            print request.method
+            if request.POST["month"] != "Not Selected":
+                month = datetime.strptime(request.POST["month"], '%b').month
+                # month_to_int = datetime.strptime(month, '%m')
+                print '**************'
+                print 'INT:', month
+                try:
+                    context = {
+                        "mybills": Bill.objects.filter(user_id = request.session["user_id"]).order_by('date'),
+                        "past_bills": History.objects.filter(user_id = request.session["user_id"], created_at__year = request.POST["year"], created_at__month = month),
+                        "searchedDate": request.POST["month"] + ', ' + request.POST['year']
+                    }
+                except:
+                    context = {}
+            else:
+                print "Month is not selected"
+                try:
+                    context = {
+                        "mybills": Bill.objects.filter(user_id = request.session["user_id"]).order_by('date'),
+                        "past_bills": History.objects.filter(user_id = request.session["user_id"], created_at__year = request.POST["year"]),
+                        "searchedDate": request.POST['year']
+                    }
+                except:
+                    context = {}
+            return render(request, 'bills/bills.html', context)
+        else:
+            return redirect('/bills')
+    except:
+            return redirect('/')
 
 
 def logout(request):

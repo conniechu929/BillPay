@@ -4,8 +4,8 @@ var mon = new String(today.getMonth()+1);
 var year = today.getFullYear();
 
 function startTime() {
-  var monthes = ["January","February","March","April","May","June","July","August","September","October","November","December"]
-  var month = monthes[today.getMonth()];
+  var months = ["January","February","March","April","May","June","July","August","September","October","November","December"]
+  var month = months[today.getMonth()];
   today = new Date();
   var hour = today.getHours();
   var minute = today.getMinutes();
@@ -21,7 +21,42 @@ function checkTime(i) {
   return i;
 }
 
+function populate_search_Options(){
+  days = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31];
+  months = ["Not Selected", "Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sept","Oct","Nov","Dec"];
+  years = [2016, 2017];
+  var daySelect=document.getElementById('select_day');
+  var monthSelect=document.getElementById('select_month');
+  var yearSelect=document.getElementById('select_year');
+
+  for(i in days){
+    var opt1 = document.createElement("option");
+    opt1.value= days[i];
+    opt1.innerHTML = days[i]; // whatever property it has
+    daySelect.appendChild(opt1);
+
+    if(months[i]){
+      var opt2 = document.createElement("option");
+      opt2.value= months[i];
+      opt2.innerHTML = months[i];
+      monthSelect.appendChild(opt2);
+    }
+    if(years[i]){
+      var opt3 = document.createElement("option");
+      opt3.value= years[i];
+      opt3.innerHTML = years[i];
+      yearSelect.appendChild(opt3);
+    }
+  }
+};
+
 $(document).ready(function() {
+    populate_search_Options();
+    $('#advanced_search').click(function() {
+      $( "#dateSearch" ).toggle( "fast", function() {
+      // Animation complete.
+      });
+    });
 
     $(window).scroll(function(){
       if ($(this).scrollTop()>1){
@@ -30,22 +65,6 @@ $(document).ready(function() {
       else {
         $("nav").removeClass('opacity');
       }
-    });
-
-    $('.signin-toggle').click(function() {
-      $("#registration").slideUp("slow", function() {
-        $("#signin").slideDown("slow");
-      });
-    });
-
-    $('.register-toggle').click(function() {
-      $("#signin").slideUp("slow", function() {
-        $("#registration").slideDown("slow");
-      });
-    });
-
-    $("#navLogin").click(function() {
-      $("nav").removeClass('opacity');
     });
 
   var selector = document.getElementById("selector");
@@ -65,6 +84,7 @@ $(document).ready(function() {
       if($("#hiddenform"))
       $("#hiddenform").fadeOut();
     }
+
   });
 
 
@@ -161,7 +181,17 @@ $('.color_row').each(function() {
 
   });
 
+  if($('#tracker')){
+    console.log('YAY');
+    $( "#past_bills_anker" ).click();
+    window.scrollTo('#past_bills_header');
+  }
+
 });
+
+
+
+
 function searchByName(input_id, table_id) {
   // Declare variables
   var input, filter, table, tr, td, i;
