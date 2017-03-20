@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+<<<<<<< HEAD
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -13,145 +14,174 @@
     <link rel="stylesheet" type="text/css" href="{% static 'bills/css/bills.css' %}">
     <script src="{% static 'bills/javascript/bill_pay.js'%}" charset="utf-8"></script>
   </head>
+=======
+ <head>
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <title>Bill Manager</title>
+   {% load staticfiles %}
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.0.3/jquery-confirm.min.css">
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.0.3/jquery-confirm.min.js"></script>
+   <link rel="stylesheet" type="text/css" href="{% static 'bills/css/bills.css' %}">
+   <script src="{% static 'bills/javascript/bill_pay.js'%}" charset="utf-8"></script>
+ </head>
+>>>>>>> 3d3958e88280d62fc4ef6077079f667ce6d7ff61
 
-  <body onload="startTime()">
-    <nav class="navbar navbar-default navbar-fixed-top">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="#myPage">BillPay</a>
-        </div>
-        <div class="collapse navbar-collapse" id="myNavbar">
-          <ul class="nav navbar-nav navbar-right">
-            <li><a href="#setting">SETTINGS</a></li>
-            <li><a href="#history">HISTORY</a></li>
-            <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
-          </ul>
-        </div>
-      </div>
-    </nav>
-    <br>
-    <br>
-    <div id="front_page" class="container-fluid">
-      <h1>Welcome, {{ request.session.first_name }}</h1>
-      <div id="clock"></div>
-    </div>
-      <!-- Table for Bills here-->
-    <div id="myBills" class="container-fluid">
-      <br>
-      <button type="button" data-toggle="modal" data-target="#NewItemForm">Add a New Bill</button>
-      <br><br>
-      <ul class="nav nav-pills grey">
-        <li class="active"><a data-toggle="pill" href="#current" class="tab">Current Bills</a></li>
-        <li><a data-toggle="pill" href="#past" class="tab">Past history</a></li>
-      </ul>
+ <body onload="startTime()">
+   <nav class="navbar navbar-default navbar-fixed-top">
+     <div class="container">
+       <div class="navbar-header">
+         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+           <span class="icon-bar"></span>
+           <span class="icon-bar"></span>
+           <span class="icon-bar"></span>
+         </button>
+         <a class="navbar-brand" href="#myPage">BillPay</a>
+       </div>
+       <div class="collapse navbar-collapse" id="myNavbar">
+         <ul class="nav navbar-nav navbar-right">
+           <li><a href="#setting">SETTINGS</a></li>
+           <li><a href="#history">HISTORY</a></li>
+           <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+         </ul>
+       </div>
+     </div>
+   </nav>
+   <br>
+   <br>
+   <div id="front_page" class="container-fluid">
+     <h1>Welcome, {{ request.session.first_name }}</h1>
+     <div id="clock"></div>
+   </div>
+     <!-- Table for Bills here-->
+   <div id="myBills" class="container-fluid">
+     <br>
+     <button type="button" data-toggle="modal" data-target="#NewItemForm">Add a New Bill</button>
+     <br><br>
+     <ul class="nav nav-pills grey">
+       <li class="active"><a data-toggle="pill" href="#current" class="tab">Current Bills</a></li>
+       <li><a data-toggle="pill" href="#past" class="tab" id="past_bills_anker">Past history</a></li>
+     </ul>
 
-      <div class="tab-content">
-        <div id="current" class="tab-pane fade in active">
-          <div class="table-responsive">
-            <h3>Current bills</h3>
-            <input type="text" id="name_search" onkeyup="searchByName( 'name_search', 'current_bills')" placeholder="Search by Name">
+     <div class="tab-content">
+       <div id="current" class="tab-pane fade in active">
+         <div class="table-responsive">
+           <h3>Current bills</h3>
+           <input type="text" id="name_search" onkeyup="searchByName( 'name_search', 'current_bills')" placeholder="Search by Name">
 
-            <table id='current_bills' class="table table-hover">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Title</th>
-                  <th>Amount</th>
-                  <th>Link</th>
-                  <th>Date</th>
-                  <th>Days till Due</th>
-                  <th>Paid</th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for bill in mybills %}
-                <tr>
-                  <td>{{forloop.counter}}</td>
-                  <td>{{bill.title}}</td>
-                  <td>${{bill.amount}}0</td>
-                  <td><a href="{{bill.link}}">Link here</a></td>
-                  <td class="color_row">{{bill.date|date:"m-d-Y"}}</td>
-                  <td><form class="markbill" action="/markbill/{{bill.id}}" method="post">
-                    {% csrf_token %}
-                    <input class="marked"  type="checkbox" name="paid" value="{{bill.title}}">
-                    <input type="submit" hidden value="SUBMIT">
-                  </form><td>
-                </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <div id="past" class="tab-pane fade">
-            <h3>History of bills</h3>
-            <input type="text" id="past_name_search" onkeyup="searchByName('past_name_search', 'past_bills')" placeholder="Search by Name">
-            <div class="table-responsive">
-              <table id='past_bills' class="table table-hover">
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>Title</th>
-                    <th>Amount</th>
-                    <th>Link</th>
-                    <th>Paid On</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {% for bill in past_bills %}
-                  <tr>
-
-                      <td>{{ forloop.counter }}</td>
-                      <td>{{ bill.title }}</td>
-                      <td>${{ bill.amount }}0</td>
-                      <td><a href="{{bill.link}}">Link here</a></td>
-                      <td>{{bill.created_at|date:"m-d-Y"}}</td>
-                  </tr>
-
-                  {% endfor %}
-                </tbody>
-              </table>
-            </div>
-        </div>
-      </div>
-
-      <div class="container">
-      <!-- Modal -->
-      <div class="modal fade" id="NewItemForm" role="dialog">
-        <div class="modal-dialog modal-sm">
-          <!-- Modal content-->
-          <div id='errorBox'>
-            {% for message in messages %}
-            <p style="color:red;">{{message}}</p>
-            {% endfor %}
-          </div>
-          <h4 class="modal-title">Add a New Bill</h4><br>
-          <form class="register" id="addform" action="/newbill" method="post">
+           <table id='current_bills' class="table table-hover">
+             <thead>
+               <tr>
+                 <th>#</th>
+                 <th>Title</th>
+                 <th>Amount</th>
+                 <th>Link</th>
+                 <th>Date</th>
+                 <th>Days till Due</th>
+                 <th>Paid</th>
+               </tr>
+             </thead>
+             <tbody>
+               {% for bill in mybills %}
+               <tr>
+                 <td>{{forloop.counter}}</td>
+                 <td>{{bill.title}}</td>
+                 <td>${{bill.amount}}0</td>
+                 <td><a href="{{bill.link}}">Link here</a></td>
+                 <td class="color_row">{{bill.date|date:"m-d-Y"}}</td>
+                 <td><form class="markbill" action="/markbill/{{bill.id}}" method="post">
+                   {% csrf_token %}
+                   <input class="marked"  type="checkbox" name="paid" value="{{bill.title}}">
+                   <input type="submit" hidden value="SUBMIT">
+                 </form><td>
+               </tr>
+               {% endfor %}
+             </tbody>
+           </table>
+         </div>
+       </div>
+       <div id="past" class="tab-pane fade">
+           <h3 id="past_bills_header">History of bills</h3>
+           <input type="text" id="past_name_search" onkeyup="searchByName('past_name_search', 'past_bills')" placeholder="Search by Name">
+           <h6 id="advanced_search">Advanced Search by Date</h6>
+           <form hidden id='dateSearch' action="/searchDate" method="post">
             {% csrf_token %}
-            <li class="bill_form">Title: </li><input type="text" name="title">
-            <li class="bill_form">Amount: </li><input type="number" step='0.01' name="amount">
-            <li class="bill_form">Date: </li><input type="date" id="date" name="date">
-            <input type="text" hidden id="payday" name="payday" value="">
-            <li class="bill_form">Link to pay: </li><input type="url" name="link">
-            <li class="bill_form">Payment type</li>
-            <select id="selector" name="type">
-              <option value="default">Select type</option>
-              <option value="monthly">Monthly Payment</option>
-              <option value="onetime">One time Payment</option>
-            </select>
-            <div id="hiddenform" style="display: none;">
-              <li class="bill_form">How many months?: </li><input id="monthsInput" type="number" name="times" min="2">
-              <input id="checkbox" type="checkbox" name="undef_times" value="9999"> I dont know exactly<br>
-            </div>
-            <input type="submit" value="Add Bill">
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
+             <select hidden id="select_day" name="day">
+             </select>
+             Month<select id="select_month" name="month">
+             </select>
+             Year<select id="select_year" name="year">
+             </select>
+             <input type="submit" value="Search">
+           </form>
+           <div class="table-responsive">
+             <table id='past_bills' class="table table-hover">
+                {% if searchedDate %}
+                  <h4 id="tracker">Filtered by: {{ searchedDate }}</h4>
+                {% endif %}
+               <thead>
+                 <tr>
+                   <th>#</th>
+                   <th>Title</th>
+                   <th>Amount</th>
+                   <th>Link</th>
+                   <th>Paid On</th>
+                 </tr>
+               </thead>
+               <tbody>
+                 {% for bill in past_bills %}
+                 <tr>
+
+                     <td>{{ forloop.counter }}</td>
+                     <td>{{ bill.title }}</td>
+                     <td>${{ bill.amount }}0</td>
+                     <td><a href="{{bill.link}}">Link here</a></td>
+                     <td>{{bill.created_at|date:"m-d-Y"}}</td>
+                 </tr>
+
+                 {% endfor %}
+               </tbody>
+             </table>
+           </div>
+       </div>
+     </div>
+
+     <div class="container">
+     <!-- Modal -->
+     <div class="modal fade" id="NewItemForm" role="dialog">
+       <div class="modal-dialog modal-sm">
+         <!-- Modal content-->
+         <div id='errorBox'>
+           {% for message in messages %}
+           <p style="color:red;">{{message}}</p>
+           {% endfor %}
+         </div>
+         <h4 class="modal-title">Add a New Bill</h4><br>
+         <form class="register" id="addform" action="/newbill" method="post">
+           {% csrf_token %}
+           <li class="bill_form">Title: </li><input type="text" name="title">
+           <li class="bill_form">Amount: </li><input type="number" step='0.01' name="amount">
+           <li class="bill_form">Date: </li><input type="date" id="date" name="date">
+           <input type="text" hidden id="payday" name="payday" value="">
+           <li class="bill_form">Link to pay: </li><input type="url" name="link">
+           <li class="bill_form">Payment type</li>
+           <select id="selector" name="type">
+             <option value="default">Select type</option>
+             <option value="monthly">Monthly Payment</option>
+             <option value="onetime">One time Payment</option>
+           </select>
+           <div id="hiddenform" style="display: none;">
+             <li class="bill_form">How many months?: </li><input id="monthsInput" type="number" name="times" min="2">
+             <input id="checkbox" type="checkbox" name="undef_times" value="9999"> I dont know exactly<br>
+           </div>
+           <input type="submit" value="Add Bill">
+         </form>
+       </div>
+     </div>
+   </div>
+ </div>
 </body>
 </html>

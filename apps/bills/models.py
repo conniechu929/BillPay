@@ -100,6 +100,7 @@ class BillManager(models.Manager):
 
 
 
+
 # class HistoryManager(models.Manager):
 
 

@@ -10,4 +10,5 @@ urlpatterns = [
     url(r'^bills$', views.bills),
     url(r'^newbill$', views.addBill),
     url(r'^markbill/(?P<id>\d+)$', views.markBill),
+    url(r'^searchDate$', views.searchDate)
 ]
