@@ -164,6 +164,41 @@ def markBill(request, id):
     else:
         return redirect('/bills')
 
+def updateBill(request, id):
+    if request.method == "POST":
+        kwargs = {
+            'id': id,
+            'title': request.POST['title'],
+            'amount': request.POST['amount'],
+            'date': request.POST['date'],
+            'payday': request.POST['payday'],
+            'link': request.POST['link'],
+            'type': request.POST['type'],
+            'times': request.POST['times'],
+            'undef_times': request.POST.get('undef_times', False)
+        }
+        bill = Bill.objects.updateBill(**kwargs)
+
+        if bill[0] == False:
+            for error in bill[1]:
+                messages.warning(request, error, extra_tags = int(request.POST['count']))
+            return redirect('/bills')
+        elif bill[0] == True:
+            return redirect('/bills')
+
+    else:
+        return redirect('/bills')
+
+
+
+def deleteBill(request, id):
+    if request.method == "POST":
+        Bill.objects.get(id = id).delete()
+        print "Bill has been deleted"
+        return redirect("/bills")
+    else:
+        return redirect('/bills')
+
 def searchDate(request):
     try:
         request.session['user_id']

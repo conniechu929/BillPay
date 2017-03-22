@@ -20,6 +20,7 @@ function checkTime(i) {
   return i;
 }
 
+
 function populate_search_Options(){
   days = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31];
   months = ["Not Selected", "Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sept","Oct","Nov","Dec"];
@@ -50,6 +51,7 @@ function populate_search_Options(){
 };
 
 $(document).ready(function() {
+  //populating the values for the dropdown input in advanced_search
     populate_search_Options();
     $('#advanced_search').click(function() {
       $( "#dateSearch" ).toggle( "fast", function() {
@@ -57,6 +59,7 @@ $(document).ready(function() {
       });
     });
 
+//opacity for the nav bar
     $(window).scroll(function(){
       if ($(this).scrollTop()>1){
         $("nav").addClass('opacity');
@@ -66,18 +69,19 @@ $(document).ready(function() {
       }
     });
 
-<<<<<<< HEAD:apps/bills/static/bills/javascript/bill_pay.js
-
-=======
->>>>>>> 3d3958e88280d62fc4ef6077079f667ce6d7ff61:apps/bills/static/bills/javascript/bill_pay.js
+//CREATE ITEMS
   var selector = document.getElementById("selector");
   var checkbox = document.getElementById("checkbox");
   var errorBox = document.getElementById("errorBox");
   var input = document.getElementById("date");
 
+// UPDATE VARIABLES
+  var errorBox_update = document.getElementById("errorBox_update");
+
   function isEmpty( el ){
       return !$.trim(el.html())
   }
+
   //fadein and fadeout the hidden monthly form
   selector.addEventListener('change', function(){
     if(selector.value == "monthly"){
@@ -89,7 +93,18 @@ $(document).ready(function() {
     }
 
   });
-
+  //fadein and fadeout the hidden monthly form for UPDATE
+  $('.selector_update').change(function() {
+    hidden_form = $(this).siblings('#hiddenform_update');
+    if($(this).val() == "monthly"){
+      hidden_form.fadeIn();
+    }
+    else {
+      if(hidden_form){
+        hidden_form.fadeOut();
+      }
+    }
+  });
 
 
 
@@ -104,6 +119,22 @@ $(document).ready(function() {
     }
   });
 
+//fading in and out months input if checkbox is checked for UPDATE
+  $('.checkbox_update').change(function() {
+    monthsInput_update = $(this).siblings('#monthsInput_update');
+    if ($(this).is(':checked')) {
+        monthsInput_update.fadeOut();
+        monthsInput_update.removeAttr('value');
+    }
+    else {
+        monthsInput_update.fadeIn();
+    }
+  });
+
+
+
+
+
 //apearing a modal window if having validation errors
   if(isEmpty($('#errorBox'))){
   }
@@ -111,6 +142,20 @@ $(document).ready(function() {
     $('#NewItemForm').modal('show');
   }
 
+//saving an ID of an Updating modal window, so we can open it if there will be validation errors
+  get_Modal = function(obj){
+    modal = obj.getAttribute('data-target');
+    localStorage.setItem("modal", modal);
+    console.log(modal);
+  }
+
+//apearing a modal window if having validation errors for UPDATE
+  if(isEmpty($('#errorBox_update'))){
+  }
+  else {
+    var modal = localStorage.getItem("modal");
+    $(modal).modal('show');
+  }
 //Adding clock
   if(mon.length < 2) {
     mon = "0" + mon;
@@ -145,15 +190,47 @@ $('.marked').on('change', function () {
     }
   });
 
+
+//making a confirm pop up window for deleted bills
+  $( ".delete_button" ).on( "click", function() {
+    form = $(this).siblings("form");
+    $.confirm({
+            title: 'Please Confirm',
+            content: 'Are you sure, that you want to delete ' + $(this).text() + '?',
+            buttons: {
+                confirm: function () {
+                form.submit();
+                },
+                cancel: function () {
+                },
+            }
+          });
+  });
+
+
+
+
+
 //catching a day from the datefield to save in DB
   document.getElementById("date").oninput = function() {
-    var string = $('#date').val()
+    var string = $('#date').val();
     var pay_day = "";
     for(var i=string.length-2;i<string.length;i++){
       pay_day = pay_day + string[i];
     }
     $("#payday").val(pay_day);
   };
+
+//catching a day from the datefield to UPDATE in DB
+  $( ".date_update" ).on( "input", function() {
+    var string = $(this).val();
+    var pay_day = "";
+    hidden_input = $(this).siblings(".payday_update");
+    for(var i=string.length-2;i<string.length;i++){
+      pay_day = pay_day + string[i];
+    }
+    hidden_input.val(pay_day);
+  });
 
 //changing the color of the <tr> depending on priority
 $('.color_row').each(function() {
@@ -184,26 +261,13 @@ $('.color_row').each(function() {
 
   });
 
-<<<<<<< HEAD:apps/bills/static/bills/javascript/bill_pay.js
-
-
-
-=======
-  if($('#tracker')){
-    console.log('YAY');
+  if($('#tracker').html()){
     $( "#past_bills_anker" ).click();
-    window.scrollTo('#past_bills_header');
   }
->>>>>>> 3d3958e88280d62fc4ef6077079f667ce6d7ff61:apps/bills/static/bills/javascript/bill_pay.js
-
 });
 
 
-
-<<<<<<< HEAD:apps/bills/static/bills/javascript/bill_pay.js
-=======
-
->>>>>>> 3d3958e88280d62fc4ef6077079f667ce6d7ff61:apps/bills/static/bills/javascript/bill_pay.js
+//adding a searchbar by names
 function searchByName(input_id, table_id) {
   // Declare variables
   var input, filter, table, tr, td, i;

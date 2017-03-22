@@ -73,8 +73,37 @@ class BillManager(models.Manager):
                 bill = Bill.objects.create(user_id=User.objects.get(id=kwargs['user_id']), title=kwargs['title'], amount=kwargs['amount'], date=kwargs['date'], payday=kwargs['payday'], link=kwargs['link'], times= 1)
                 bill.save()
             # bill.save()
-            schedule_reminder(bill)
+            # schedule_reminder(bill)
             print bill," has been saved!"
+            print "**********************"
+            return (True, bill)
+
+    def updateBill(self, **kwargs):
+        errors = []
+        if len(kwargs['title']) == 0 or len(kwargs['date']) == 0 or len(kwargs['link']) == 0:
+             errors.append('Please fill all the required fields')
+        if kwargs['type'] == 'default' :
+            errors.append('Please Select a Payment type')
+        if kwargs['type'] == 'monthly':
+            if len(kwargs['times']) == 0 and kwargs['undef_times'] == False:
+                errors.append('Please tell us how many months do you need to pay this bill')
+        if len(errors) is not 0:
+            return (False, errors)
+        else:
+            bill = Bill.objects.get(id=kwargs['id'])
+            bill.title = kwargs['title']
+            bill.amount=kwargs['amount']
+            bill.date=kwargs['date']
+            bill.payday=kwargs['payday']
+            bill.link=kwargs['link']
+            if kwargs['type'] == 'monthly' and len(kwargs['times']) > 0:
+                bill.times=kwargs['times']
+            elif kwargs['type'] == 'monthly' and len(kwargs['times']) == 0:
+                bill.times=kwargs['undef_times']
+            else:
+                bill.times= 1
+            bill.save()
+            print bill," has been updated!"
             print "**********************"
             return (True, bill)
 

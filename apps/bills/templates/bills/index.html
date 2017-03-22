@@ -25,6 +25,9 @@
           <ul class="nav navbar-nav navbar-right">
             <li><a href="#billAboutUs">ABOUT</a></li>
             <li><a href="#billContact">CONTACT</a></li>
+            {% if request.session.user_id %}
+            <li><a href="/bills"><span class="glyphicon glyphicon-list-alt"></span> Your Bills</a></li>
+            {%endif%}
             <li class="dropdown" id="menuLogin">
               {% if request.session.user_id %}
                 <a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a>
@@ -183,8 +186,9 @@
       <div id="contactInfo">
         <h3>You can reach us: </h3>
         <p><span class="glyphicon glyphicon-map-marker logo-small"></span> San Francisco, CA</p>
-        <p><span class="glyphicon glyphicon-phone logo-small"></span> ...</p>
-        <p><span class="glyphicon glyphicon-envelope logo-small"></span> ...</p>
+        <!-- <p><span class="glyphicon glyphicon-phone logo-small"></span> ...</p> -->
+        <p><span class="glyphicon glyphicon-envelope logo-small"></span>Connie Chu: conniechu929@gmail.com</p>
+        <p><span class="glyphicon glyphicon-envelope logo-small"></span>Victor Pak: 09pve09@gmail.com</p>
       </div>
     </div>
   </body>

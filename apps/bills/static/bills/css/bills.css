@@ -127,12 +127,51 @@ ul li{
   color: white;
 }
 
-.bill_form {
+.bill_form, .bill_form1 {
   color: white;
   list-style: none;
   font-size: 1.3vw;
 }
 
+.bill_form1{
+  color: black !important;
+  font-weight: bold;
+  margin-bottom: 2vw;
+}
+
 .tab {
   color: grey;
+}
+
+#advanced_search {
+    color: #3399FF;
+    cursor: pointer;
+}
+
+#advanced_search:hover {
+  text-decoration: underline;
+}
+
+td, th {
+  text-align: center;
+}
+
+.glyph{
+  display: inline-block;
+  vertical-align: top;
+}
+
+
+.delete_button, .update_button {
+  cursor: pointer;
+  margin-right: 1.5vw;
+  margin-left: 1.5vw;
+}
+
+.delete_button:hover{
+  color: red;
+}
+
+.update_button:hover{
+  color: blue;
 }
