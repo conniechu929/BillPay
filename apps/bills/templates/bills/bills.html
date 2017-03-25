@@ -93,11 +93,13 @@
                           <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
                             <h4 class="modal-title" style="color: black">Update Your Bill</h4>
-                            <div id='errorBox_update'>
+                            <div class='errorBox_update'>
                                 {% for message in messages %}
                                   {% if message.level == DEFAULT_MESSAGE_LEVELS.WARNING %}
                                     {% if message.extra_tags == forloop.parentloop.counter %}
                                       <p style="color:red;">{{message}}</p>
+                                    {% else %}
+                                      <p hidden>{{message}}</p>
                                     {% endif %}
                                   {% endif %}
                                 {% endfor %}

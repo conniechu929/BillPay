@@ -141,18 +141,19 @@ $(document).ready(function() {
   else {
     $('#NewItemForm').modal('show');
   }
-
 //saving an ID of an Updating modal window, so we can open it if there will be validation errors
   get_Modal = function(obj){
     modal = obj.getAttribute('data-target');
     localStorage.setItem("modal", modal);
-    console.log(modal);
+    // console.log(modal);
   }
 
 //apearing a modal window if having validation errors for UPDATE
-  if(isEmpty($('#errorBox_update'))){
+  if(isEmpty($('.errorBox_update'))){
+    // console.log('nothing happened');
   }
   else {
+    // console.log('window is opened');
     var modal = localStorage.getItem("modal");
     $(modal).modal('show');
   }
