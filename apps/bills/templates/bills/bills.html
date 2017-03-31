@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.0.3/jquery-confirm.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.0.3/jquery-confirm.min.js"></script>
     <link rel="stylesheet" type="text/css" href="{% static 'bills/css/bills.css' %}">
-    <script src="{% static 'bills/javascript/bill_pay.js'%}" charset="utf-8"></script>
+    <script src="{% static 'bills/javascript/pay.js'%}" charset="utf-8"></script>
   </head>
 
  <body onload="startTime()">
@@ -46,7 +46,7 @@
      <br><br>
      <ul class="nav nav-pills grey">
        <li class="active"><a data-toggle="pill" href="#current" class="tab">Current Bills</a></li>
-       <li><a data-toggle="pill" href="#past" class="tab" id="past_bills_anker history">Past history</a></li>
+       <li><a data-toggle="pill" href="#past" class="tab" id="history">Past history</a></li>
      </ul>
 
      <div class="tab-content">

@@ -141,6 +141,9 @@ $(document).ready(function() {
   else {
     $('#NewItemForm').modal('show');
   }
+
+
+
 //saving an ID of an Updating modal window, so we can open it if there will be validation errors
   get_Modal = function(obj){
     modal = obj.getAttribute('data-target');
@@ -166,9 +169,7 @@ $(document).ready(function() {
     day_to_s = "0" + day_to_s;
   }
   var date = new String( year + '-' + mon + '-' + day_to_s );
-
-  // DONT FORGET TO UNCOMMENT!!!!
-  // input.setAttribute('min', date);
+  input.setAttribute('min', date);
 
 
 //making a confirm pop up window for payed bills
@@ -261,9 +262,9 @@ $('.color_row').each(function() {
   }
 
   });
-
+//open a history tab if the search by date was triggered
   if($('#tracker').html()){
-    $( "#past_bills_anker" ).click();
+    $('#history').click();
   }
 });
 
