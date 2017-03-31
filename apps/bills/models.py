@@ -3,7 +3,7 @@ from django.forms import ModelForm
 from django.db import models
 from django.core.exceptions import ValidationError
 from datetime import date
-# from timezone_field import TimeZoneField
+
 from dateutil.relativedelta import relativedelta
 
 import bcrypt
